@@ -1,52 +1,60 @@
-# Prerequisites
-*.d
-
-# Object files
-*.o
-*.ko
+# Uncomment these types if you want even more clean repository. But be careful.
+# It can make harm to an existing project source. Read explanations below.
+#
+#*.res
+*.tlb
+*.ddp
+*.vlb
+*.deployproj
 *.obj
-*.elf
-
-# Linker output
-*.ilk
+*.ppu
+*.o
+*.or
+*.compiled
+*.rst
+*.rsj
+*.s
+*.so
+*.lrs
+*.bak
+*.bak0
+*.bak1
+*.bak2
+*.bak3
+*.old
+*.lps
+*.exe
+*.dll
+*.bpl
+*.bpi
+*.dcp
+*.so
+*.apk
+*.drc
 *.map
-*.exp
-
-# Precompiled Headers
-*.gch
-*.pch
-
-# Libraries
+*.dres
+*.rsm
+*.tds
+*.dcu
 *.lib
 *.a
-*.la
-*.lo
-
-# Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-*.so.*
-*.dylib
-
-# Executables
-*.exe
-*.out
-*.app
-*.i*86
-*.x86_64
-*.hex
-
-# Debug files
-*.dSYM/
-*.su
-*.idb
-*.pdb
-
-# Kernel Module Compile Results
-*.mod*
-*.cmd
-.tmp_versions/
-modules.order
-Module.symvers
-Mkfile.old
-dkms.conf
+*.o
+*.ocx
+*.cfg
+*.hpp
+Resource.rc
+*.local
+*.identcache
+*.projdata
+*.tvsconfig
+*.dsk
+*.~*
+*.stat
+*.json
+lib/
+backup/
+obj/
+bin/
+modules/
+__history/
+__recovery/
