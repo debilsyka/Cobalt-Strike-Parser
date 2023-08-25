@@ -7,7 +7,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  Buttons, ComCtrls, DateUtils;
+  Buttons, ComCtrls, ExtCtrls, DateUtils;
 
 type
 
@@ -15,14 +15,21 @@ type
 
   TSearchWindow = class(TForm)
     BitBtn1: TBitBtn;
-    ProgressBar1: TProgressBar;
-    Start: TButton;
-    Path: TEdit;
+    getCountry: TCheckBox;
     Label1: TLabel;
     Memo: TMemo;
+    PageControl1: TPageControl;
+    Path: TEdit;
+    ProgressBar1: TProgressBar;
     SelectLogDirDialog: TSelectDirectoryDialog;
+    Start: TButton;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    useAiOut: TCheckBox;
+    useAiTask: TCheckBox;
     procedure BitBtn1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure PageControl1Change(Sender: TObject);
     procedure StartClick(Sender: TObject);
   private
 
@@ -236,6 +243,13 @@ end;
 procedure TSearchWindow.FormCreate(Sender: TObject);
 begin
   SelectLogDirDialog.InitialDir := GetUserDir + 'Desktop';
+  useAiTask.Enabled:=False;
+  useAiOut.Enabled:=False;
+end;
+
+procedure TSearchWindow.PageControl1Change(Sender: TObject);
+begin
+
 end;
 
 procedure TSearchWindow.StartClick(Sender: TObject);
