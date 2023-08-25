@@ -33,7 +33,6 @@ type
     useAiTask: TCheckBox;
     procedure BitBtn1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure PageControl1Change(Sender: TObject);
     procedure StartClick(Sender: TObject);
   private
 
@@ -249,11 +248,6 @@ begin
   SelectLogDirDialog.InitialDir := GetUserDir + 'Desktop';
   useAiTask.Enabled:=False;
   useAiOut.Enabled:=False;
-end;
-
-procedure TSearchWindow.PageControl1Change(Sender: TObject);
-begin
-
 end;
 
 procedure TSearchWindow.StartClick(Sender: TObject);

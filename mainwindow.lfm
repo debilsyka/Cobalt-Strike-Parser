@@ -1,11 +1,11 @@
 object SearchWindow: TSearchWindow
-  Left = 102
-  Height = 678
-  Top = 150
-  Width = 552
+  Left = 589
+  Height = 568
+  Top = 263
+  Width = 445
   Caption = 'SearchWindow'
-  ClientHeight = 658
-  ClientWidth = 552
+  ClientHeight = 548
+  ClientWidth = 445
   Menu = MainMenu1
   OnCreate = FormCreate
   LCLVersion = '2.2.6.0'
@@ -17,9 +17,9 @@ object SearchWindow: TSearchWindow
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
     Left = 30
-    Height = 598
+    Height = 488
     Top = 30
-    Width = 492
+    Width = 385
     ActivePage = TabSheet1
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Left = 30
@@ -28,11 +28,10 @@ object SearchWindow: TSearchWindow
     BorderSpacing.Bottom = 30
     TabIndex = 0
     TabOrder = 0
-    OnChange = PageControl1Change
     object TabSheet1: TTabSheet
       Caption = 'Input/Output'
-      ClientHeight = 570
-      ClientWidth = 484
+      ClientHeight = 460
+      ClientWidth = 377
       object Path: TEdit
         AnchorSideLeft.Control = TabSheet1
         AnchorSideTop.Control = Label1
@@ -40,7 +39,7 @@ object SearchWindow: TSearchWindow
         Left = 30
         Height = 23
         Top = 60
-        Width = 335
+        Width = 228
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 30
         BorderSpacing.Top = 30
@@ -52,7 +51,7 @@ object SearchWindow: TSearchWindow
         AnchorSideTop.Control = TabSheet1
         AnchorSideRight.Control = TabSheet1
         AnchorSideRight.Side = asrBottom
-        Left = 395
+        Left = 288
         Height = 53
         Top = 30
         Width = 59
@@ -201,7 +200,7 @@ object SearchWindow: TSearchWindow
         Left = 30
         Height = 15
         Top = 30
-        Width = 335
+        Width = 228
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 30
         BorderSpacing.Top = 30
@@ -220,7 +219,7 @@ object SearchWindow: TSearchWindow
         Left = 30
         Height = 36
         Top = 210
-        Width = 424
+        Width = 317
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 30
         BorderSpacing.Top = 30
@@ -238,9 +237,9 @@ object SearchWindow: TSearchWindow
         AnchorSideRight.Side = asrBottom
         AnchorSideBottom.Control = ProgressBar1
         Left = 30
-        Height = 194
+        Height = 84
         Top = 276
-        Width = 424
+        Width = 317
         Anchors = [akTop, akLeft, akRight, akBottom]
         BorderSpacing.Left = 30
         BorderSpacing.Top = 30
@@ -260,8 +259,8 @@ object SearchWindow: TSearchWindow
         AnchorSideBottom.Side = asrBottom
         Left = 30
         Height = 40
-        Top = 500
-        Width = 424
+        Top = 390
+        Width = 317
         Anchors = [akLeft, akRight, akBottom]
         BorderSpacing.Left = 30
         BorderSpacing.Top = 30
