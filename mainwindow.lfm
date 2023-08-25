@@ -1,7 +1,7 @@
 object SearchWindow: TSearchWindow
-  Left = 95
+  Left = 148
   Height = 678
-  Top = 119
+  Top = 107
   Width = 668
   Caption = 'SearchWindow'
   ClientHeight = 678

@@ -11,6 +11,7 @@
       <UseXPManifest Value="True"/>
       <XPManifest>
         <DpiAware Value="True"/>
+        <AnsiUTF8 Value="True"/>
       </XPManifest>
       <Icon Value="0"/>
     </General>
