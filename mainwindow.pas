@@ -102,7 +102,7 @@ begin
   currentInputTime := '';
   currentTask := '';
   hackerNickname := '';
-  try
+  //try
     lines.LoadFromFile(logFile);
     FLogMessage := 'Парсинг файла: ' + logFile;
     Synchronize(@UpdateMemo);
@@ -167,10 +167,10 @@ begin
       else
         Inc(i);
     end;
-  finally
+  //finally
     lines.Free;
     data.Free;
-  end;
+  //end;
 end;
 
 procedure TMyThread.OnExitThread;
