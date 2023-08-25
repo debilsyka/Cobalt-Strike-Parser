@@ -23,4 +23,5 @@
  
  + Output/ErrorResult - ответ хакеру
  
+ 
   ![Screenshot](https://github.com/lartsev1337/CobaltParser/raw/main/screenshot.png)
