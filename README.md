@@ -9,7 +9,7 @@
  По итогу в той папке которую мы указали будет создан CSV файл, в котором будут колоки:
  
  | HackerNickname | InputTime | InputCommand | Task | Output/ErrorTime | Output/ErrorResult |
- |----------|----------|----------|----------|----------|----------|
+ |:---------|:--------:|:--------:|:--------:|:--------:|---------:|
  | lartsev | 13/31 13:13:13 | run net group "domain admins" \/dom | <T1059> Tasked beacon to run: net group "domain admins" \/dom| | |
 
  
