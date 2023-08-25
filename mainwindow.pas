@@ -7,7 +7,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  Buttons, ComCtrls, ExtCtrls, DateUtils;
+  Buttons, ComCtrls, ExtCtrls, Menus, DateUtils;
 
 type
 
@@ -17,7 +17,11 @@ type
     BitBtn1: TBitBtn;
     getCountry: TCheckBox;
     Label1: TLabel;
+    MainMenu1: TMainMenu;
     Memo: TMemo;
+    MenuItem1: TMenuItem;
+    MenuItem2: TMenuItem;
+    MenuItem3: TMenuItem;
     PageControl1: TPageControl;
     Path: TEdit;
     ProgressBar1: TProgressBar;
