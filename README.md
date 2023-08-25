@@ -6,7 +6,7 @@
  
  | HackerNickname | InputTime | InputCommand | Task | Output/ErrorTime | Output/ErrorResult |
  |:---------|:--------:|:--------:|:--------:|:--------:|---------:|
- | lartsev | 13/31 13:13:13 | run net group "domain admins" \/dom | <T1059> Tasked beacon to run: net group "domain admins" \/dom| | |
+ | lartsev | 13/31 13:13:13 | run net group "domain admins" \/dom | <T1059> Tasked beacon to run: net group "domain admins" \/dom| 13/31 14:14:14 | чёта-там |
 
  
  HackerNickname, InputTime, InputCommand, Task, Output/ErrorTime, Output/ErrorResult
@@ -23,5 +23,3 @@
  
  + Output/ErrorResult - ответ хакеру
  
- 
-  ![Screenshot](https://github.com/lartsev1337/CobaltParser/raw/main/screenshot.png)
