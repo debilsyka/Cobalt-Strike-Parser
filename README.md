@@ -5,3 +5,19 @@
  ![Screenshot](https://github.com/lartsev1337/CobaltParser/raw/main/screenshot.png)
  
  ![Screenshot](https://github.com/lartsev1337/CobaltParser/raw/main/screenshot2.png)
+
+ По итогу в той папке которую мы указали будет создан CSV файл, в котором будут колоки:
+ 
+ HackerNickname, InputTime, InputCommand, Task, Output/ErrorTime, Output/ErrorResult
+ 
+ HackerNickname - никнейм хакера
+ 
+ InputTime - время отдачи команды
+ 
+ InputCommand - команда
+ 
+ Task - задача
+ 
+ Output/ErrorTime - время выполнения и получения ответа 
+ 
+ Output/ErrorResult - ответ хакеру
