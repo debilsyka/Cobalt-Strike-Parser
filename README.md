@@ -10,7 +10,7 @@
  
  | HackerNickname | InputTime | InputCommand | Task | Output/ErrorTime | Output/ErrorResult |
  |----------|----------|----------|----------|----------|----------|
- | <lartsev> | 02/21 13:43:56 | run net group "domain admins" \/dom | <T1059> Tasked beacon to run: net group "domain admins" \/dom| | |
+ | lartsev | 02/21 13:43:56 | run net group "domain admins" \/dom | <T1059> Tasked beacon to run: net group "domain admins" \/dom| | |
 
  
  HackerNickname, InputTime, InputCommand, Task, Output/ErrorTime, Output/ErrorResult
