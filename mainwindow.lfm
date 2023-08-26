@@ -1,10 +1,10 @@
 object SearchWindow: TSearchWindow
-  Left = 98
-  Height = 515
-  Top = 155
+  Left = 95
+  Height = 518
+  Top = 149
   Width = 413
   Caption = 'SearchWindow'
-  ClientHeight = 495
+  ClientHeight = 498
   ClientWidth = 413
   Menu = MainMenu1
   OnCreate = FormCreate
@@ -18,7 +18,7 @@ object SearchWindow: TSearchWindow
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
     Left = 30
-    Height = 375
+    Height = 378
     Top = 90
     Width = 353
     ActivePage = TabSheet1
@@ -31,7 +31,7 @@ object SearchWindow: TSearchWindow
     TabOrder = 0
     object TabSheet1: TTabSheet
       Caption = 'Input/Output'
-      ClientHeight = 347
+      ClientHeight = 350
       ClientWidth = 345
       object Start: TButton
         AnchorSideLeft.Control = TabSheet1
@@ -62,7 +62,7 @@ object SearchWindow: TSearchWindow
         AnchorSideRight.Side = asrBottom
         AnchorSideBottom.Control = ProgressBar1
         Left = 30
-        Height = 78
+        Height = 81
         Top = 169
         Width = 285
         Anchors = [akTop, akLeft, akRight, akBottom]
@@ -84,7 +84,7 @@ object SearchWindow: TSearchWindow
         AnchorSideBottom.Side = asrBottom
         Left = 30
         Height = 40
-        Top = 277
+        Top = 280
         Width = 285
         Anchors = [akLeft, akRight, akBottom]
         BorderSpacing.Left = 30
