@@ -53,6 +53,7 @@ Resource.rc
 *.json
 lib/
 backup/
+python-3.11.5-embed-win32/
 obj/
 bin/
 modules/

@@ -6,8 +6,9 @@ unit MainWindow;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  Buttons, ComCtrls, ExtCtrls, Menus, DateUtils, openaiwindow, ProcMonLogger;
+  Classes, SysUtils, StrUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
+  StdCtrls, Buttons, ComCtrls, ExtCtrls, Menus, DateUtils,
+  OpenAiWindow, ProcMonLogger, RegExpr, PythonEngine;
 
 type
 
@@ -46,7 +47,9 @@ type
     procedure Execute; override;
     destructor Destroy; override;
     function ParseLogFile(logFile: string): TStringList;
+    procedure ExtractDateAndIP(const path: string; out dateStr: string; out ipStr: string);
   public
+    PyEngine: TPythonEngine;
     FLogMessage: string;
     FMaxCount: Integer;
     Directory: string;
@@ -66,6 +69,28 @@ implementation
 {$R *.lfm}
 
 { TSearchWindow }
+
+procedure TMyThread.ExtractDateAndIP(const path: string; out dateStr: string; out ipStr: string);
+var
+  regex: TRegExpr;
+begin
+  regex := TRegExpr.Create;
+  try
+    regex.Expression := '\\(\d{6})\\([\d\.]+)\\';
+    if regex.Exec(path) then
+    begin
+      dateStr := regex.Match[1];
+      ipStr := regex.Match[2];
+    end
+    else
+    begin
+      dateStr := '';
+      ipStr := '';
+    end;
+  finally
+    regex.Free;
+  end;
+end;
 
 procedure TMyThread.SetMaxProgress;
 begin
@@ -91,6 +116,7 @@ end;
 
 function TMyThread.ParseLogFile(logFile: string): TStringList;
 var
+  dateStr, ipStr: String;
   lines, data: TStringList;  // Объявляем два списка строк: один для строк из файла, другой для временного хранения данных.
   i: Integer;  // Индекс для прохода по строкам файла.
   line, currentInput, currentInputTime, currentTask, hackerNickname, timeStamp,
@@ -105,6 +131,11 @@ begin
   hackerNickname := '';
   lines.LoadFromFile(logFile);  // Загружаем строки из файла в список.
   FLogMessage := 'Парсинг файла: ' + logFile;  // Устанавливаем сообщение о парсинге файла.
+
+  //
+  ExtractDateAndIP(logFile, dateStr, ipStr);
+  //ProcMonDebugOutput(PWideChar(UnicodeString(dateStr + '-' + ipStr)));
+
   Synchronize(@UpdateMemo);  // Обновляем интерфейс
   i := 0;
   while i < lines.Count do  // Проходим по всем строкам файла.
@@ -250,6 +281,12 @@ constructor TMyThread.Create(CreateSuspended: Boolean; const Dir: string);
 begin
   inherited Create(CreateSuspended);
   Directory := Dir;
+  PyEngine := TPythonEngine.Create(nil);
+  PyEngine.RegVersion := '3.11';
+  PyEngine.DllName := 'python311.dll';
+  PyEngine.DllPath := ExtractFilePath(Application.ExeName) + 'python-3.11.5-embed-win32\';
+  ProcMonDebugOutput(PWideChar(UnicodeString('Дистрибутив Python в папке: ' + PyEngine.DllPath + PyEngine.DllName)));
+  PyEngine.LoadDll;
 end;
 
 procedure TSearchWindow.FormCreate(Sender: TObject);
@@ -259,7 +296,7 @@ begin
   useAiTask.Enabled:=False;
   useAiOut.Enabled:=False;
   OpenProcessMonitorLogger;
-  ProcMonDebugOutput('Это мое отладочное сообщение');
+  ProcMonDebugOutput('Программа стартовала');
 end;
 
 procedure TSearchWindow.FormDestroy(Sender: TObject);

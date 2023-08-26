@@ -1,5 +1,5 @@
 {$codepage utf8}
-unit openaiwindow;
+unit OpenAiWindow;
 
 {$mode ObjFPC}{$H+}
 

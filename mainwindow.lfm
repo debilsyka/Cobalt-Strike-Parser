@@ -1,11 +1,11 @@
 object SearchWindow: TSearchWindow
-  Left = 150
-  Height = 518
-  Top = 150
-  Width = 413
+  Left = 447
+  Height = 675
+  Top = 222
+  Width = 876
   Caption = 'SearchWindow'
-  ClientHeight = 498
-  ClientWidth = 413
+  ClientHeight = 655
+  ClientWidth = 876
   Menu = MainMenu1
   OnCreate = FormCreate
   OnDestroy = FormDestroy
@@ -18,21 +18,21 @@ object SearchWindow: TSearchWindow
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
     Left = 30
-    Height = 378
+    Height = 535
     Top = 90
-    Width = 353
-    ActivePage = TabSheet2
+    Width = 816
+    ActivePage = TabSheet1
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Left = 30
     BorderSpacing.Top = 30
     BorderSpacing.Right = 30
     BorderSpacing.Bottom = 30
-    TabIndex = 1
+    TabIndex = 0
     TabOrder = 0
     object TabSheet1: TTabSheet
       Caption = 'Input/Output'
-      ClientHeight = 350
-      ClientWidth = 345
+      ClientHeight = 507
+      ClientWidth = 808
       object Start: TButton
         AnchorSideLeft.Control = TabSheet1
         AnchorSideTop.Control = useAiOut
@@ -44,7 +44,7 @@ object SearchWindow: TSearchWindow
         Left = 30
         Height = 36
         Top = 103
-        Width = 285
+        Width = 748
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 30
         BorderSpacing.Top = 30
@@ -62,9 +62,9 @@ object SearchWindow: TSearchWindow
         AnchorSideRight.Side = asrBottom
         AnchorSideBottom.Control = ProgressBar1
         Left = 30
-        Height = 81
+        Height = 238
         Top = 169
-        Width = 285
+        Width = 748
         Anchors = [akTop, akLeft, akRight, akBottom]
         BorderSpacing.Left = 30
         BorderSpacing.Top = 30
@@ -84,8 +84,8 @@ object SearchWindow: TSearchWindow
         AnchorSideBottom.Side = asrBottom
         Left = 30
         Height = 40
-        Top = 280
-        Width = 285
+        Top = 437
+        Width = 748
         Anchors = [akLeft, akRight, akBottom]
         BorderSpacing.Left = 30
         BorderSpacing.Top = 30
@@ -134,7 +134,7 @@ object SearchWindow: TSearchWindow
     Left = 30
     Height = 15
     Top = 30
-    Width = 264
+    Width = 727
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 30
     BorderSpacing.Top = 30
@@ -149,7 +149,7 @@ object SearchWindow: TSearchWindow
     Left = 30
     Height = 23
     Top = 60
-    Width = 264
+    Width = 727
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 30
     BorderSpacing.Top = 30
@@ -161,7 +161,7 @@ object SearchWindow: TSearchWindow
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 324
+    Left = 787
     Height = 53
     Top = 30
     Width = 59
@@ -304,12 +304,9 @@ object SearchWindow: TSearchWindow
     TabOrder = 2
   end
   object SelectLogDirDialog: TSelectDirectoryDialog
-    Left = 712
-    Top = 583
   end
   object MainMenu1: TMainMenu
-    Left = 600
-    Top = 376
+    Left = 32
     object MenuItem1: TMenuItem
       Caption = 'Settings'
       object MenuItem2: TMenuItem
