@@ -43,6 +43,12 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="MainWindow"/>
       </Unit>
+      <Unit>
+        <Filename Value="openaiwindow.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form1"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

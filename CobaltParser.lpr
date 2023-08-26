@@ -10,7 +10,7 @@ uses
   athreads,
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, MainWindow
+  Forms, MainWindow, openaiwindow
   { you can add units after this };
 
 {$R *.res}
@@ -20,6 +20,7 @@ begin
   Application.Scaled:=True;
   Application.Initialize;
   Application.CreateForm(TSearchWindow, SearchWindow);
+  Application.CreateForm(TForm1, Form1);
   Application.Run;
 end.
 

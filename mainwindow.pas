@@ -7,7 +7,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  Buttons, ComCtrls, ExtCtrls, Menus, DateUtils;
+  Buttons, ComCtrls, ExtCtrls, Menus, DateUtils, openaiwindow;
 
 type
 
@@ -15,7 +15,6 @@ type
 
   TSearchWindow = class(TForm)
     BitBtn1: TBitBtn;
-    getCountry: TCheckBox;
     Label1: TLabel;
     MainMenu1: TMainMenu;
     Memo: TMemo;
@@ -33,6 +32,8 @@ type
     useAiTask: TCheckBox;
     procedure BitBtn1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure MenuItem2Click(Sender: TObject);
     procedure StartClick(Sender: TObject);
   private
 
@@ -102,75 +103,74 @@ begin
   currentInputTime := '';
   currentTask := '';
   hackerNickname := '';
-  //try
-    lines.LoadFromFile(logFile);
-    FLogMessage := 'Парсинг файла: ' + logFile;
-    Synchronize(@UpdateMemo);
-    i := 0;
-    while i < lines.Count do
+  lines.LoadFromFile(logFile);
+  FLogMessage := 'Парсинг файла: ' + logFile;
+  Synchronize(@UpdateMemo);
+  i := 0;
+  while i < lines.Count do
+  begin
+    line := lines[i];
+    if Pos('[input]', line) > 0 then
     begin
-      line := lines[i];
-      if Pos('[input]', line) > 0 then
+      currentInputTime := Copy(line, 1, Pos(' UTC', line) - 1);
+      currentInput := Trim(Copy(line, Pos(']', line) + 1, MaxInt));
+      if Pos(' ', currentInput) > 0 then
       begin
-        currentInputTime := Copy(line, 1, Pos(' UTC', line) - 1);
-        currentInput := Trim(Copy(line, Pos(']', line) + 1, MaxInt));
-        if Pos(' ', currentInput) > 0 then
-        begin
-          hackerNickname := Copy(currentInput, 1, Pos(' ', currentInput) - 1);
-          currentInput := Copy(currentInput, Pos(' ', currentInput) + 1, MaxInt);
-        end;
+        hackerNickname := Copy(currentInput, 1, Pos(' ', currentInput) - 1);
+        currentInput := Copy(currentInput, Pos(' ', currentInput) + 1, MaxInt);
+      end;
+      Inc(i);
+    end
+    else if Pos('[task]', line) > 0 then
+    begin
+      currentTask := Trim(Copy(line, Pos(']', line) + 1, MaxInt));
+      if (i + 1 < lines.Count) and (Pos('[output]', lines[i + 1]) = 0) and
+         (Pos('[error]', lines[i + 1]) = 0) then
+      begin
+        Result.Add(Format('"%s","%s","%s","%s","",""', [
+        EscapeCSVValue(hackerNickname),
+        currentInputTime,
+        EscapeCSVValue(currentInput),
+        EscapeCSVValue(currentTask)]));
         Inc(i);
-      end
-      else if Pos('[task]', line) > 0 then
-      begin
-        currentTask := Trim(Copy(line, Pos(']', line) + 1, MaxInt));
-        if (i + 1 < lines.Count) and (Pos('[output]', lines[i + 1]) = 0) and
-           (Pos('[error]', lines[i + 1]) = 0) then
-        begin
-          Result.Add(Format('"%s","%s","%s","%s","",""', [
-          EscapeCSVValue(hackerNickname),
-          currentInputTime,
-          EscapeCSVValue(currentInput),
-          EscapeCSVValue(currentTask)]));
-          Inc(i);
-        end
-        else
-        begin
-          Inc(i);
-          Continue;
-        end;
-      end
-      else if (Pos('[output]', line) > 0) or (Pos('[error]', line) > 0) then
-      begin
-        timeStamp := Copy(line, 1, Pos(' UTC', line) - 1);
-        data.Clear;
-        Inc(i);
-        while (i < lines.Count)
-              and (Pos('[input]', lines[i]) = 0)
-              and (Pos('[task]', lines[i]) = 0)
-              and (Pos('[output]', lines[i]) = 0)
-              and (Pos('[error]', lines[i]) = 0)
-              and (Pos('[checkin]', lines[i]) = 0) do
-        begin
-          data.Add(Trim(lines[i]));
-          Inc(i);
-        end;
-        resultStr := StringReplace(data.Text, #13#10, ' ', [rfReplaceAll]);
-          Result.Add(Format('"%s","%s","%s","%s","%s","%s"', [
-          EscapeCSVValue(hackerNickname),
-          currentInputTime,
-          EscapeCSVValue(currentInput),
-          EscapeCSVValue(currentTask),
-          timeStamp,
-          EscapeCSVValue(resultStr)]));
       end
       else
+      begin
         Inc(i);
+        Continue;
+      end;
+    end
+    else if (Pos('[output]', line) > 0) or (Pos('[error]', line) > 0) then
+    begin
+      timeStamp := Copy(line, 1, Pos(' UTC', line) - 1);
+      data.Clear;
+      Inc(i);
+      while (i < lines.Count)
+            and (Pos('[input]', lines[i]) = 0)
+            and (Pos('[task]', lines[i]) = 0)
+            and (Pos('[output]', lines[i]) = 0)
+            and (Pos('[error]', lines[i]) = 0)
+            and (Pos('[checkin]', lines[i]) = 0) do
+      begin
+        data.Add(Trim(lines[i]));
+        Inc(i);
+      end;
+      resultStr := StringReplace(data.Text, #13#10, ' ', [rfReplaceAll]);
+        Result.Add(Format('"%s","%s","%s","%s","%s","%s"', [
+        EscapeCSVValue(hackerNickname),
+        currentInputTime,
+        EscapeCSVValue(currentInput),
+        EscapeCSVValue(currentTask),
+        timeStamp,
+        EscapeCSVValue(resultStr)]));
+    end
+    else
+      Inc(i);
     end;
-  //finally
+
     lines.Free;
     data.Free;
-  //end;
+
 end;
 
 procedure TMyThread.OnExitThread;
@@ -245,9 +245,21 @@ end;
 
 procedure TSearchWindow.FormCreate(Sender: TObject);
 begin
+  Form1 := TForm1.Create(SearchWindow);
   SelectLogDirDialog.InitialDir := GetUserDir + 'Desktop';
   useAiTask.Enabled:=False;
   useAiOut.Enabled:=False;
+end;
+
+procedure TSearchWindow.FormDestroy(Sender: TObject);
+begin
+
+end;
+
+procedure TSearchWindow.MenuItem2Click(Sender: TObject);
+begin
+  Form1.Position := poOwnerFormCenter;
+  Form1.ShowModal;
 end;
 
 procedure TSearchWindow.StartClick(Sender: TObject);
