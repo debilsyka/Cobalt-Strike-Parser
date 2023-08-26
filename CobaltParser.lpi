@@ -47,7 +47,13 @@
         <Filename Value="openaiwindow.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="Form1"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+      </Unit>
+      <Unit>
+        <Filename Value="procmonlogger.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="ProcMonLogger"/>
       </Unit>
     </Units>
   </ProjectOptions>

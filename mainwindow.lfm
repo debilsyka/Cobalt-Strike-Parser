@@ -1,7 +1,7 @@
 object SearchWindow: TSearchWindow
-  Left = 95
+  Left = 150
   Height = 518
-  Top = 149
+  Top = 150
   Width = 413
   Caption = 'SearchWindow'
   ClientHeight = 498
@@ -21,13 +21,13 @@ object SearchWindow: TSearchWindow
     Height = 378
     Top = 90
     Width = 353
-    ActivePage = TabSheet1
+    ActivePage = TabSheet2
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Left = 30
     BorderSpacing.Top = 30
     BorderSpacing.Right = 30
     BorderSpacing.Bottom = 30
-    TabIndex = 0
+    TabIndex = 1
     TabOrder = 0
     object TabSheet1: TTabSheet
       Caption = 'Input/Output'

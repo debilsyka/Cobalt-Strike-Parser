@@ -10,7 +10,7 @@ uses
   athreads,
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, MainWindow, openaiwindow
+  Forms, MainWindow, openaiwindow, ProcMonLogger
   { you can add units after this };
 
 {$R *.res}

@@ -7,7 +7,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  Buttons, ComCtrls, ExtCtrls, Menus, DateUtils, openaiwindow;
+  Buttons, ComCtrls, ExtCtrls, Menus, DateUtils, openaiwindow, ProcMonLogger;
 
 type
 
@@ -91,42 +91,48 @@ end;
 
 function TMyThread.ParseLogFile(logFile: string): TStringList;
 var
-  lines, data: TStringList;
-  i: Integer;
+  lines, data: TStringList;  // Объявляем два списка строк: один для строк из файла, другой для временного хранения данных.
+  i: Integer;  // Индекс для прохода по строкам файла.
   line, currentInput, currentInputTime, currentTask, hackerNickname, timeStamp,
-    resultStr: string;
+    resultStr: string;  // Переменные для хранения различных частей данных из файла.
 begin
-  Result := TStringList.Create;
-  lines := TStringList.Create;
-  data := TStringList.Create;
+  Result := TStringList.Create;  // Создаем итоговый список строк.
+  lines := TStringList.Create;  // Создаем список для строк из файла.
+  data := TStringList.Create;   // Создаем временный список для данных.
   currentInput := '';
   currentInputTime := '';
   currentTask := '';
   hackerNickname := '';
-  lines.LoadFromFile(logFile);
-  FLogMessage := 'Парсинг файла: ' + logFile;
-  Synchronize(@UpdateMemo);
+  lines.LoadFromFile(logFile);  // Загружаем строки из файла в список.
+  FLogMessage := 'Парсинг файла: ' + logFile;  // Устанавливаем сообщение о парсинге файла.
+  Synchronize(@UpdateMemo);  // Обновляем интерфейс
   i := 0;
-  while i < lines.Count do
+  while i < lines.Count do  // Проходим по всем строкам файла.
   begin
     line := lines[i];
-    if Pos('[input]', line) > 0 then
+    if Pos('[input]', line) > 0 then  // Если текущая строка содержит информацию о вводе...
     begin
+      // Извлекаем время и данные ввода.
       currentInputTime := Copy(line, 1, Pos(' UTC', line) - 1);
       currentInput := Trim(Copy(line, Pos(']', line) + 1, MaxInt));
+      // Проверяем, есть ли пробел в строке ввода.
       if Pos(' ', currentInput) > 0 then
       begin
+        // Извлекаем псевдоним хакера и данные ввода.
         hackerNickname := Copy(currentInput, 1, Pos(' ', currentInput) - 1);
         currentInput := Copy(currentInput, Pos(' ', currentInput) + 1, MaxInt);
       end;
       Inc(i);
     end
-    else if Pos('[task]', line) > 0 then
+    else if Pos('[task]', line) > 0 then  // Если текущая строка содержит информацию о задаче...
     begin
+      // Извлекаем данные задачи.
       currentTask := Trim(Copy(line, Pos(']', line) + 1, MaxInt));
+      // Проверяем следующую строку на наличие информации о выводе или ошибке.
       if (i + 1 < lines.Count) and (Pos('[output]', lines[i + 1]) = 0) and
          (Pos('[error]', lines[i + 1]) = 0) then
       begin
+        // Добавляем строку в итоговый список.
         Result.Add(Format('"%s","%s","%s","%s","",""', [
         EscapeCSVValue(hackerNickname),
         currentInputTime,
@@ -140,11 +146,13 @@ begin
         Continue;
       end;
     end
-    else if (Pos('[output]', line) > 0) or (Pos('[error]', line) > 0) then
+    else if (Pos('[output]', line) > 0) or (Pos('[error]', line) > 0) then  // Если текущая строка содержит информацию о выводе или ошибке...
     begin
+      // Извлекаем временную метку.
       timeStamp := Copy(line, 1, Pos(' UTC', line) - 1);
-      data.Clear;
+      data.Clear;  // Очищаем временный список.
       Inc(i);
+      // Собираем все последующие строки, пока не встретим другие метки.
       while (i < lines.Count)
             and (Pos('[input]', lines[i]) = 0)
             and (Pos('[task]', lines[i]) = 0)
@@ -155,22 +163,23 @@ begin
         data.Add(Trim(lines[i]));
         Inc(i);
       end;
+      // Преобразуем все строки в одну строку, разделенную пробелами.
       resultStr := StringReplace(data.Text, #13#10, ' ', [rfReplaceAll]);
-        Result.Add(Format('"%s","%s","%s","%s","%s","%s"', [
-        EscapeCSVValue(hackerNickname),
-        currentInputTime,
-        EscapeCSVValue(currentInput),
-        EscapeCSVValue(currentTask),
-        timeStamp,
-        EscapeCSVValue(resultStr)]));
+      // Добавляем строку в итоговый список.
+      Result.Add(Format('"%s","%s","%s","%s","%s","%s"', [
+      EscapeCSVValue(hackerNickname),
+      currentInputTime,
+      EscapeCSVValue(currentInput),
+      EscapeCSVValue(currentTask),
+      timeStamp,
+      EscapeCSVValue(resultStr)]));
     end
     else
       Inc(i);
-    end;
-
-    lines.Free;
-    data.Free;
-
+  end;
+  // Освобождаем память, выделенную для списков.
+  lines.Free;
+  data.Free;
 end;
 
 procedure TMyThread.OnExitThread;
@@ -249,11 +258,13 @@ begin
   SelectLogDirDialog.InitialDir := GetUserDir + 'Desktop';
   useAiTask.Enabled:=False;
   useAiOut.Enabled:=False;
+  OpenProcessMonitorLogger;
+  ProcMonDebugOutput('Это мое отладочное сообщение');
 end;
 
 procedure TSearchWindow.FormDestroy(Sender: TObject);
 begin
-
+  CloseProcessMonitorLogger;
 end;
 
 procedure TSearchWindow.MenuItem2Click(Sender: TObject);
