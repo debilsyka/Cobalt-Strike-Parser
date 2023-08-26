@@ -49,7 +49,7 @@ type
     function ParseLogFile(logFile: string): TStringList;
     procedure ExtractDateAndIP(const path: string; out dateStr: string; out ipStr: string);
   public
-    PyEngine: TPythonEngine;
+
     FLogMessage: string;
     FMaxCount: Integer;
     Directory: string;
@@ -63,7 +63,7 @@ type
 
 var
   SearchWindow: TSearchWindow;
-
+  PyEngine: TPythonEngine;
 implementation
 
 {$R *.lfm}
