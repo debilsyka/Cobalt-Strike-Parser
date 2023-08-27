@@ -1,5 +1,6 @@
 # CobaltParser
  ## Cobalt Strike beacon*.log parser input and output
+ ### Актуальный билд (исходники в разработке) [download](https://github.com/lartsev1337/Cobalt-Strike-Parser/releases/download/CobaltStrike_beacon_parser/CobaltParser.exe)
  Укажите папку в которой собраны логи beacon*.log, программа начнет искать файлы рекурсивно, в этой папке и пренадлежащей ей подпапками.
   
  По итогу в той папке которую мы указали будет создан CSV файл, в котором будут колоки:
