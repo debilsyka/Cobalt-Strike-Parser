@@ -1,5 +1,5 @@
 # CobaltParser
- ## Cobalt Strike beacon*.log parser input and output
+ ## Cobalt Strike Log parser input and output
  ### Current build [download](https://github.com/lartsev1337/Cobalt-Strike-Parser/releases/download/parser/CobaltParser.exe)
  Specify the folder where the beacon*.log logs are collected, the program will start searching for files recursively in this folder and its subfolders.
 
