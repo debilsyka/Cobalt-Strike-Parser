@@ -27,9 +27,6 @@
     </RunParams>
     <RequiredPackages>
       <Item>
-        <PackageName Value="python4lazarus_package"/>
-      </Item>
-      <Item>
         <PackageName Value="LCL"/>
       </Item>
     </RequiredPackages>
@@ -47,14 +44,6 @@
         <UnitName Value="MainWindow"/>
       </Unit>
       <Unit>
-        <Filename Value="openaiwindow.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="Form1"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="OpenAiWindow"/>
-      </Unit>
-      <Unit>
         <Filename Value="procmonlogger.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="ProcMonLogger"/>
@@ -69,7 +58,6 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="python4delphi\Source"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <CodeGeneration>
@@ -79,6 +67,7 @@
     </CodeGeneration>
     <Linking>
       <Debugging>
+        <GenerateDebugInfo Value="False"/>
         <DebugInfoType Value="dsDwarf2Set"/>
       </Debugging>
       <Options>

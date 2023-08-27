@@ -7,8 +7,7 @@ interface
 
 uses
   Classes, SysUtils, StrUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, Buttons, ComCtrls, ExtCtrls, Menus, DateUtils,
-  OpenAiWindow, ProcMonLogger, RegExpr, PythonEngine;
+  StdCtrls, Buttons, ComCtrls, ExtCtrls, Menus, DateUtils, ProcMonLogger, RegExpr;
 
 type
 
@@ -17,24 +16,16 @@ type
   TSearchWindow = class(TForm)
     BitBtn1: TBitBtn;
     Label1: TLabel;
-    MainMenu1: TMainMenu;
     Memo: TMemo;
-    MenuItem1: TMenuItem;
-    MenuItem2: TMenuItem;
-    MenuItem3: TMenuItem;
     PageControl1: TPageControl;
     Path: TEdit;
     ProgressBar1: TProgressBar;
     SelectLogDirDialog: TSelectDirectoryDialog;
     Start: TButton;
     TabSheet1: TTabSheet;
-    TabSheet2: TTabSheet;
-    useAiOut: TCheckBox;
-    useAiTask: TCheckBox;
     procedure BitBtn1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
-    procedure MenuItem2Click(Sender: TObject);
     procedure StartClick(Sender: TObject);
   private
 
@@ -47,9 +38,7 @@ type
     procedure Execute; override;
     destructor Destroy; override;
     function ParseLogFile(logFile: string): TStringList;
-    procedure ExtractDateAndIP(const path: string; out dateStr: string; out ipStr: string);
   public
-
     FLogMessage: string;
     FMaxCount: Integer;
     Directory: string;
@@ -63,34 +52,12 @@ type
 
 var
   SearchWindow: TSearchWindow;
-  PyEngine: TPythonEngine;
+  PyCheck : Boolean;
 implementation
 
 {$R *.lfm}
 
 { TSearchWindow }
-
-procedure TMyThread.ExtractDateAndIP(const path: string; out dateStr: string; out ipStr: string);
-var
-  regex: TRegExpr;
-begin
-  regex := TRegExpr.Create;
-  try
-    regex.Expression := '\\(\d{6})\\([\d\.]+)\\';
-    if regex.Exec(path) then
-    begin
-      dateStr := regex.Match[1];
-      ipStr := regex.Match[2];
-    end
-    else
-    begin
-      dateStr := '';
-      ipStr := '';
-    end;
-  finally
-    regex.Free;
-  end;
-end;
 
 procedure TMyThread.SetMaxProgress;
 begin
@@ -114,17 +81,22 @@ begin
   SearchWindow.Memo.Append(FLogMessage);
 end;
 
+{
+    Процедура парсинга принимает файл, читает его построчно, и занимается парсингом.
+    Возращает список строк по формату подходящих CSV
+}
 function TMyThread.ParseLogFile(logFile: string): TStringList;
 var
-  dateStr, ipStr: String;
   lines, data: TStringList;  // Объявляем два списка строк: один для строк из файла, другой для временного хранения данных.
   i: Integer;  // Индекс для прохода по строкам файла.
-  line, currentInput, currentInputTime, currentTask, hackerNickname, timeStamp,
-    resultStr: string;  // Переменные для хранения различных частей данных из файла.
+  line, currentMetaTime, currentMeta, currentInput, currentInputTime, currentTask,
+    hackerNickname, timeStamp, resultStr: string;  // Переменные для хранения различных частей данных из файла.
 begin
   Result := TStringList.Create;  // Создаем итоговый список строк.
   lines := TStringList.Create;  // Создаем список для строк из файла.
   data := TStringList.Create;   // Создаем временный список для данных.
+  currentMeta := '';
+  currentMetaTime := '';
   currentInput := '';
   currentInputTime := '';
   currentTask := '';
@@ -132,8 +104,6 @@ begin
   lines.LoadFromFile(logFile);  // Загружаем строки из файла в список.
   FLogMessage := 'Парсинг файла: ' + logFile;  // Устанавливаем сообщение о парсинге файла.
 
-  //
-  ExtractDateAndIP(logFile, dateStr, ipStr);
   //ProcMonDebugOutput(PWideChar(UnicodeString(dateStr + '-' + ipStr)));
 
   Synchronize(@UpdateMemo);  // Обновляем интерфейс
@@ -141,7 +111,19 @@ begin
   while i < lines.Count do  // Проходим по всем строкам файла.
   begin
     line := lines[i];
-    if Pos('[input]', line) > 0 then  // Если текущая строка содержит информацию о вводе...
+    if Pos('[metadata]', line) > 0 then  // Если текущая строка содержит информацию о вводе...
+    begin
+      // Извлекаем время и данные ввода.
+      currentMetaTime := Copy(line, 1, Pos(' UTC', line) - 1);
+      currentMeta := Copy(line, Pos(']', line) + 1, MaxInt);
+      // Проверяем, есть ли пробел в строке ввода.
+      if Pos(' ', currentMeta) > 0 then
+      begin
+        currentMeta := Copy(currentMeta, Pos(' ', currentMeta) + 1, MaxInt);
+      end;
+      Inc(i);
+    end
+    else if Pos('[input]', line) > 0 then  // Если текущая строка содержит информацию о вводе...
     begin
       // Извлекаем время и данные ввода.
       currentInputTime := Copy(line, 1, Pos(' UTC', line) - 1);
@@ -164,7 +146,9 @@ begin
          (Pos('[error]', lines[i + 1]) = 0) then
       begin
         // Добавляем строку в итоговый список.
-        Result.Add(Format('"%s","%s","%s","%s","",""', [
+        Result.Add(Format('"%s","%s","%s","%s","%s","%s","",""', [
+        EscapeCSVValue(currentMeta),
+        currentMetaTime,
         EscapeCSVValue(hackerNickname),
         currentInputTime,
         EscapeCSVValue(currentInput),
@@ -197,7 +181,9 @@ begin
       // Преобразуем все строки в одну строку, разделенную пробелами.
       resultStr := StringReplace(data.Text, #13#10, ' ', [rfReplaceAll]);
       // Добавляем строку в итоговый список.
-      Result.Add(Format('"%s","%s","%s","%s","%s","%s"', [
+      Result.Add(Format('"%s","%s","%s","%s","%s","%s","%s","%s"', [
+      EscapeCSVValue(currentMeta),
+      currentMetaTime,
       EscapeCSVValue(hackerNickname),
       currentInputTime,
       EscapeCSVValue(currentInput),
@@ -216,7 +202,6 @@ end;
 procedure TMyThread.OnExitThread;
 begin
   SearchWindow.ProgressBar1.Position := 0;
-  SearchWindow.Memo.Append('Парсинг завершен!');
   SearchWindow.Start.Enabled := True;
 end;
 
@@ -229,7 +214,7 @@ procedure TMyThread.Execute;
 var
   FoundFiles, parsedData, CSVOutput: TStringList;
   i: Integer;
-  CSVFileName: string;
+  dateStr, ipStr: String;
   procedure SearchFiles(const ADir: string);
   var
     LocalSearchRec: TSearchRec;
@@ -254,26 +239,32 @@ var
   end;
 begin
   FoundFiles := TStringList.Create;
-  CSVOutput := TStringList.Create;
   try
     SearchFiles(Directory);
-    FLogMessage := 'Всего файлов найдено: ' + FoundFiles.Count.toString;
+    FLogMessage := 'Total files found: ' + FoundFiles.Count.toString;
     FMaxCount := FoundFiles.Count;
     Synchronize(@SetMaxProgress);
     Synchronize(@UpdateMemo);
-    CSVOutput.Add('HackerNickname,InputTime,InputCommand,Task,Output/ErrorTime,Output/ErrorResult');
-    for i := 0 to FoundFiles.Count - 1 do
     begin
-      parsedData := ParseLogFile(FoundFiles[i]);
-      Synchronize(@UpdateProgress);
-      CSVOutput.AddStrings(parsedData);
-      parsedData.Free;
+      CSVOutput := TStringList.Create;
+      CSVOutput.Add('Metadata,MetaTime,HackerNickname,InputTime,InputCommand,Task,Output/ErrorTime,Output/ErrorResult');
+      for i := 0 to FoundFiles.Count - 1 do
+      begin
+        parsedData := ParseLogFile(FoundFiles[i]);
+        if (parsedData <> nil) and (parsedData.Count > 0) then
+        begin
+             CSVOutput.AddStrings(parsedData);
+        end;
+        Synchronize(@UpdateProgress);
+        parsedData.Free;
+      end;
+      CSVOutput.SaveToFile(IncludeTrailingPathDelimiter(Directory) + 'Export.csv');
+      FLogMessage := 'Saved in ' + IncludeTrailingPathDelimiter(Directory) + 'Export.csv';
+      Synchronize(@UpdateMemo);
     end;
-    CSVFileName := IncludeTrailingPathDelimiter(Directory) + 'parsed_logs.csv';
-    CSVOutput.SaveToFile(CSVFileName);
   finally
-    FoundFiles.Free;
     CSVOutput.Free;
+    FoundFiles.Free;
   end;
 end;
 
@@ -281,33 +272,19 @@ constructor TMyThread.Create(CreateSuspended: Boolean; const Dir: string);
 begin
   inherited Create(CreateSuspended);
   Directory := Dir;
-  PyEngine := TPythonEngine.Create(nil);
-  PyEngine.RegVersion := '3.11';
-  PyEngine.DllName := 'python311.dll';
-  PyEngine.DllPath := ExtractFilePath(Application.ExeName) + 'python-3.11.5-embed-win32\';
-  ProcMonDebugOutput(PWideChar(UnicodeString('Дистрибутив Python в папке: ' + PyEngine.DllPath + PyEngine.DllName)));
-  PyEngine.LoadDll;
+
 end;
 
 procedure TSearchWindow.FormCreate(Sender: TObject);
 begin
-  Form1 := TForm1.Create(SearchWindow);
   SelectLogDirDialog.InitialDir := GetUserDir + 'Desktop';
-  useAiTask.Enabled:=False;
-  useAiOut.Enabled:=False;
   OpenProcessMonitorLogger;
-  ProcMonDebugOutput('Программа стартовала');
+  ProcMonDebugOutput('The program has started');
 end;
 
 procedure TSearchWindow.FormDestroy(Sender: TObject);
 begin
   CloseProcessMonitorLogger;
-end;
-
-procedure TSearchWindow.MenuItem2Click(Sender: TObject);
-begin
-  Form1.Position := poOwnerFormCenter;
-  Form1.ShowModal;
 end;
 
 procedure TSearchWindow.StartClick(Sender: TObject);
@@ -327,8 +304,7 @@ procedure TSearchWindow.BitBtn1Click(Sender: TObject);
 begin
   if SelectLogDirDialog.Execute then
   begin
-       Path.Text := SelectLogDirDialog.FileName
+    Path.Text := SelectLogDirDialog.FileName
   end;
 end;
-
 end.
