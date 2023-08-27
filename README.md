@@ -11,8 +11,6 @@
  |:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|
  | 0.0.0.0 <- 0.0.0.0 ... ... | 13/31 12:12:12 | lartsev | 13/31 13:13:13 | run net group "domain admins" \/dom | <T1059> Tasked beacon to run: net group "domain admins" \/dom| 13/31 14:14:14 | easy-peasy |
 
- 
- HackerNickname, InputTime, InputCommand, Task, Output/ErrorTime, Output/ErrorResult
 
  + Metadata - information about the connection and module
 
