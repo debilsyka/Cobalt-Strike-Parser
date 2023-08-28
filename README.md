@@ -75,6 +75,7 @@ for ip in unique_ips:
 
 ```
 
+
 ## Получаем все записи которые относятся к США
 ```
 total_records = len(countries)
@@ -93,10 +94,12 @@ values = list(country_counts.values())
 
 ```
 
+
 ## В процентном соотношении...
 ```python
 all_us = us_records / total_records * 100
 ```
+
 
 ## Строим график на этих данных
 ```python
@@ -113,12 +116,12 @@ plt.show()
 
 ![png](output_2_0.png)
     
-
+## Пробуем отфильтровать записи по внешнему IP (в качестве примера)
 ```python
-#filtered_data = data[data['External_IP'].fillna('').str.startswith("50.205.")]
+filtered_data = data[data['External_IP'].fillna('').str.startswith("50.205.")]
 ```
 
-
+## Пробуем отфильтровать отфильтрованное по части имени ПК (в качестве примера)
 ```python
-#filtered_data = filtered_data[filtered_data['CompName'].fillna('').str.startswith("LAPTOP")]
+filtered_data = filtered_data[filtered_data['CompName'].fillna('').str.startswith("LAPTOP")]
 ```
