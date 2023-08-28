@@ -75,7 +75,7 @@ for ip in unique_ips:
 
 ```
 
-# Получаем все записи которые относятся к США
+## Получаем все записи которые относятся к США
 ```
 total_records = len(countries)
 us_records = list(countries.values()).count('US')
@@ -93,12 +93,12 @@ values = list(country_counts.values())
 
 ```
 
-# в процентном соотношении
+## В процентном соотношении...
 ```python
 all_us = us_records / total_records * 100
 ```
 
-# Строим график на этих данных
+## Строим график на этих данных
 ```python
 labels = ['USA', 'Others']
 sizes = [all_us, 100-all_us]
@@ -113,8 +113,6 @@ plt.show()
 
 ![png](output_2_0.png)
     
-
-
 
 ```python
 #filtered_data = data[data['External_IP'].fillna('').str.startswith("50.205.")]
