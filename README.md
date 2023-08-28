@@ -111,7 +111,7 @@ plt.show()
 ```
 
 ![png](output_2_0.png)
-    
+   
 ### Trying to filter entries by external IP
 ```python
 filtered_data = data[data['External_IP'].fillna('').str.startswith("50.205.")]
