@@ -28,10 +28,7 @@
  
  + Output/ErrorResult - response to the hacker
  
- 
- 
 # CSV analyzer in Jupyter
-  
 ```python
 import pandas as pd
 import re
@@ -77,7 +74,6 @@ for ip in unique_ips:
 
 ```
 
-
 ### Retrieving all entries related to the USA
 ```
 total_records = len(countries)
@@ -96,12 +92,10 @@ values = list(country_counts.values())
 
 ```
 
-
 ### In terms of percentage...
 ```python
 all_us = us_records / total_records * 100
 ```
-
 
 ### Plotting a graph based on these data
 ```python
