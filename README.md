@@ -73,6 +73,10 @@ for ip in unique_ips:
     except Exception as e:
         countries[ip] = "Unknown"
 
+```
+
+# Получаем все записи которые относятся к США
+```
 total_records = len(countries)
 us_records = list(countries.values()).count('US')
 
@@ -89,12 +93,12 @@ values = list(country_counts.values())
 
 ```
 
-
+# в процентном соотношении
 ```python
 all_us = us_records / total_records * 100
 ```
 
-
+# Строим график на этих данных
 ```python
 labels = ['USA', 'Others']
 sizes = [all_us, 100-all_us]
@@ -107,8 +111,6 @@ ax1.axis('equal')
 plt.show()
 ```
 
-
-    
 ![png](output_2_0.png)
     
 
