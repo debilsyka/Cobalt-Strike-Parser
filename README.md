@@ -28,6 +28,8 @@
  
  + Output/ErrorResult - response to the hacker
  
+ 
+ 
 # CSV analyzer in Jupyter
   
 ```python
