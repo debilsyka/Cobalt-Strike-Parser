@@ -54,7 +54,7 @@ def extract_computer_name(s):
 def extract_internal_ip(s):
     if not isinstance(s, str):
         return None
-    pattern = r'(?<=<-\s)(10\.\d{1,3}\.\d{1,3}\.\d{1,3}|192\.168\.\d{1,3}\.\d{1,3})'
+    pattern = r'(?<=<-\s)(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'
     match = re.search(pattern, s)
     return match.group(0) if match else None
 
